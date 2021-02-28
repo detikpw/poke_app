@@ -6,7 +6,7 @@ const Heading = props => (
 )
 
 const Text = props => (
-  <Box {...props} fontFamily="vt323" lineHeight="140%" />
+  <Box {...props} fontFamily="vt323" />
 )
 
 export { Heading, Text }
