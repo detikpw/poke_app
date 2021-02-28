@@ -1,11 +1,11 @@
 import React from 'react';
 import { ThemeProvider } from 'theme-ui'
-import { ApolloClient, InMemoryCache, gql, HttpLink, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink, ApolloProvider } from '@apollo/client';
 import fetch from 'cross-fetch';
+import { Global } from '@emotion/core'
 import { hashira } from './theme'
-import { Box, Flex } from './reusable/flexbox'
-import { Heading, Text } from './reusable/typography';
-import { Divider } from './reusable/divider';
+import { Box } from './reusable/flexbox'
+import { Heading } from './reusable/typography';
 import { List } from './pages/pokemon';
 
 
@@ -17,12 +17,16 @@ const client = new ApolloClient({
 const App = () => (
   <ApolloProvider client={client}>
     <ThemeProvider theme={hashira}>
-      <Box
-        height="100%"
-        fontFamily="vt323"
-        bg="bg-1"
-        color="primary"
-      >
+      <Global
+        styles={theme => ({
+          body: {
+            backgroundColor: theme.colors['bg-1'],
+            color: theme.colors.primary,
+            fontFamily: theme.fonts.vt323
+          }
+        })}
+      />
+      <Box height="100%">
         <Box px={4} py={2} bg="bg-2">
           <Heading color="alt-2">
             PokeApp
