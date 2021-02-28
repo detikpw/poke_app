@@ -17,6 +17,7 @@ const moduleRules = [{
 ]
 
 const clientConfig = {
+  mode: 'development',
   entry: './src/client',
   output: {
     filename: 'bundle.js',
@@ -28,6 +29,7 @@ const clientConfig = {
 }
 
 const serverConfig = {
+  mode: 'development',
   entry: './src',
   output: {
     filename: 'index.js',
