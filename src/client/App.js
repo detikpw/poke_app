@@ -26,15 +26,21 @@ const App = () => (
           }
         })}
       />
-      <Box height="100%">
-        <Box px={4} py={2} bg="bg-2">
-          <Heading color="alt-2">
-            PokeApp
-          </Heading>
-        </Box>
-        <Box p={4}>
-          <List />
-        </Box>
+      <Box
+        px={4}
+        py={2}
+        bg="bg-2"
+        sx={{
+          top: 0,
+          position: 'sticky'
+        }}
+      >
+      <Heading color="alt-2">
+        PokeApp
+      </Heading>
+      </Box>
+      <Box p={4}>
+        <List />
       </Box>
     </ThemeProvider>
   </ApolloProvider>
