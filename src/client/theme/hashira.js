@@ -19,7 +19,6 @@ const hashira = {
     // Default theme ui / rebasss
     text: '#000',
     background: '#fff',
-    primary: '#000',
   },
   space: [
     0, 4, 8, 12, 16, 20, 24, 28, 32
