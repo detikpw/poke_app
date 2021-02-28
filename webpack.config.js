@@ -1,9 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals')
-
-const filePath = path.join(__dirname, './public/js/');
-const filename = 'bundle.js';
 
 const moduleRules = [{
     test: /\.(js|jsx)$/,
@@ -15,9 +11,6 @@ const moduleRules = [{
           '@babel/preset-env',
           '@babel/preset-react'
         ],
-        plugins: [
-          ['@babel/plugin-proposal-decorators', { "legacy": true }],
-        ]
       },
     }
   }
@@ -26,15 +19,12 @@ const moduleRules = [{
 const clientConfig = {
   entry: './src/client',
   output: {
-    filename,
+    filename: 'bundle.js',
     path: path.join(__dirname, 'public')
   },
   module: {
     rules: moduleRules
   },
-  // devServer: {
-  //   contentBase: path.join(__dirname, 'public')
-  // },
 }
 
 const serverConfig = {
@@ -57,43 +47,3 @@ const serverConfig = {
 }
 
 module.exports = [clientConfig, serverConfig]
-
-// module.exports = {
-//   entry: {
-//     app: [
-//       path.join(__dirname, 'src/client/index.js'),
-//       'webpack-hot-middleware/client?path=/__wpk_hmr&reload=true'
-//     ]
-//   },
-//   output: {
-//     filename: fileName,
-//     publicPath: '/static/js/',
-//     path: filePath,
-//   },
-//   module: {
-//     rules: [
-//       {
-//         test: /\.(js|jsx)$/,
-//         exclude: /node_modules/,
-//         use: {
-//           loader: 'babel-loader',
-//           options: {
-//             presets: [
-//               '@babel/preset-env',
-//               '@babel/preset-react'
-//             ],
-//             plugins: [
-//               ['@babel/plugin-proposal-decorators', { "legacy": true }],
-//             ]
-//           },
-//         }
-//       }
-//     ]
-//   },
-
-//   plugins: [
-//     new webpack.HotModuleReplacementPlugin(),
-//   ],
-
-//   devtool: 'eval-source-map'
-// }
