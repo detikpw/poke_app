@@ -12,8 +12,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { hashira } from "./theme";
 import { Box } from "./reusable/flexbox";
 import { Heading } from "./reusable/typography";
-import { Link } from './reusable/link';
-import { List } from "./pages/pokemon";
+import { Link } from "./reusable/link";
+import { List, Detail } from "./pages/pokemon";
 
 const client = new ApolloClient({
   link: new HttpLink({
@@ -49,13 +49,16 @@ const App = () => (
             <Heading color="alt-2">PokeApp</Heading>
           </Link>
         </Box>
-          <Box p={4}>
-            <Switch>
-              <Route path="/">
-                <List />
-              </Route>
-            </Switch>
-          </Box>
+        <Box p={4}>
+          <Switch>
+            <Route path="/pokemon/:name">
+              <Detail />
+            </Route>
+            <Route path="/">
+              <List />
+            </Route>
+          </Switch>
+        </Box>
       </ThemeProvider>
     </Router>
   </ApolloProvider>
