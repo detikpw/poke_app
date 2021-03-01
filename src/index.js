@@ -10,10 +10,7 @@ const React = require("react");
 import { ThemeProvider } from "theme-ui";
 const client = require("./api").default;
 const { hashira } = require("./client/theme");
-const { Box } = require("./client/reusable/flexbox");
-const { Heading } = require("./client/reusable/typography");
-const { Link } = require("./client/reusable/link");
-const { List, Detail } = require("./client/pages/pokemon");
+const Layout = require("./client/Layout").default;
 
 const app = express();
 const port = 3000;
@@ -50,38 +47,7 @@ app.use((req, res) => {
     <ApolloProvider client={client}>
       <StaticRouter location={req.url} context={context}>
         <ThemeProvider theme={hashira}>
-          <Global
-            styles={(theme) => ({
-              body: {
-                backgroundColor: theme.colors["bg-1"],
-                color: theme.colors.primary,
-                fontFamily: theme.fonts.vt323,
-              },
-            })}
-          />
-          <Box
-            px={4}
-            py={2}
-            bg="bg-2"
-            sx={{
-              top: 0,
-              position: "sticky",
-            }}
-          >
-            <Link to="/">
-              <Heading color="alt-2">PokeApp</Heading>
-            </Link>
-          </Box>
-          <Box p={4}>
-            <Switch>
-              <Route path="/pokemon/:name">
-                <Detail />
-              </Route>
-              <Route path="/">
-                <List />
-              </Route>
-            </Switch>
-          </Box>
+          <Layout />
         </ThemeProvider>
       </StaticRouter>
     </ApolloProvider>
