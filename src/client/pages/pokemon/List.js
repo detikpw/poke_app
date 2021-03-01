@@ -18,8 +18,8 @@ const POKEMON_LIST_QUERY = gql`
   }
 `;
 
-const PokemonCard = ({ name, image, id }) => (
-  <Link to={`/pokemon/${id}`}>
+const PokemonCard = ({ name, image }) => (
+  <Link to={`/pokemon/${name}`}>
     <Flex width={1} alignItems="center">
       <Box as="img" width={1 / 3} src={image} />
       <Box width={2 / 3}>
@@ -46,7 +46,7 @@ const list = () => {
       <Heading fontSize={1}>Pokemon List</Heading>
       <Box mt={4} p={4} bg="bg-2">
         {data.pokemons.results.map(({ name, image, id }) => (
-          <PokemonCard key={id} id={id} name={name} image={image} />
+          <PokemonCard key={id} name={name} image={image} />
         ))}
       </Box>
     </Box>
