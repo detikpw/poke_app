@@ -8,10 +8,11 @@ import {
 } from "@apollo/client";
 import fetch from "cross-fetch";
 import { Global } from "@emotion/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { hashira } from "./theme";
 import { Box } from "./reusable/flexbox";
 import { Heading } from "./reusable/typography";
+import { Link } from './reusable/link';
 import { List } from "./pages/pokemon";
 
 const client = new ApolloClient({
@@ -49,11 +50,7 @@ const App = () => (
           </Link>
         </Box>
           <Box p={4}>
-            <Link to="/users">About</Link>
             <Switch>
-              <Route path="/users">
-                test
-              </Route>
               <Route path="/">
                 <List />
               </Route>

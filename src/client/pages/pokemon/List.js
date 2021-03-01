@@ -1,9 +1,9 @@
-import React from 'react'
-import { useQuery, gql } from '@apollo/client';
-import { Box, Flex } from '../../reusable/flexbox/index'
-import { Heading, Text } from '../../reusable/typography';
-import { Divider } from '../../reusable/divider';
-
+import React from "react";
+import { useQuery, gql } from "@apollo/client";
+import { Box, Flex } from "../../reusable/flexbox/index";
+import { Heading, Text } from "../../reusable/typography";
+import { Divider } from "../../reusable/divider";
+import { Link } from "../../reusable/link";
 
 const POKEMON_LIST_QUERY = gql`
   query GetPokemonList {
@@ -16,12 +16,12 @@ const POKEMON_LIST_QUERY = gql`
       }
     }
   }
-`
+`;
 
-const PokemonCard = ({ name, image }) => (
-  <Box>
+const PokemonCard = ({ name, image, id }) => (
+  <Link to={`/pokemon/${id}`}>
     <Flex width={1} alignItems="center">
-      <Box as="img" width={1 / 3} src={image}/>
+      <Box as="img" width={1 / 3} src={image} />
       <Box width={2 / 3}>
         <Flex>
           <Text color="alt-2">Name:&nbsp;</Text>
@@ -34,8 +34,8 @@ const PokemonCard = ({ name, image }) => (
       </Box>
     </Flex>
     <Divider />
-  </Box>
-)
+  </Link>
+);
 
 const list = () => {
   const { loading, error, data } = useQuery(POKEMON_LIST_QUERY);
@@ -43,20 +43,14 @@ const list = () => {
   if (error) return <p>Error :(</p>;
   return (
     <Box>
-      <Heading fontSize={1}>
-        Pokemon List
-      </Heading>
+      <Heading fontSize={1}>Pokemon List</Heading>
       <Box mt={4} p={4} bg="bg-2">
         {data.pokemons.results.map(({ name, image, id }) => (
-          <PokemonCard
-            key={id}
-            name={name}
-            image={image}
-          />
+          <PokemonCard key={id} id={id} name={name} image={image} />
         ))}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default list
+export default list;
