@@ -20,7 +20,7 @@ const client = new ApolloClient({
     uri: "https://graphql-pokeapi.vercel.app/api/graphql",
     fetch,
   }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache().restore(JSON.parse(window.__APOLLO_STATE__)),
 });
 
 const App = () => (
