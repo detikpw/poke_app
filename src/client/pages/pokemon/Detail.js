@@ -4,6 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 import { Box, Flex } from "../../reusable/flexbox/index";
 import { Heading, Text } from "../../reusable/typography";
 import { Divider } from "../../reusable/divider";
+import { Button } from "../../reusable/button";
 
 const POKEMON_DETAIL_QUERY = gql`
   query GetPokemonDetail($name: String!) {
@@ -92,6 +93,18 @@ const detail = () => {
         </Box>
       </Box>
       <Divider />
+      <Flex
+        width={1}
+        py={2}
+        sx={{
+          position: "sticky",
+          bottom: 0,
+        }}
+      >
+        <Button bg="bg-2">
+          <Heading>CATCH</Heading>
+        </Button>
+      </Flex>
     </Box>
   );
 };
