@@ -5,6 +5,7 @@ import { Box, Flex } from "../../reusable/flexbox/index";
 import { Heading, Text } from "../../reusable/typography";
 import { Divider } from "../../reusable/divider";
 import { Button } from "../../reusable/button";
+import { catchedPokemons as catchedPokemonStore } from "../../store";
 
 const POKEMON_DETAIL_QUERY = gql`
   query GetPokemonDetail($name: String!) {
@@ -31,11 +32,26 @@ const POKEMON_DETAIL_QUERY = gql`
 const collectionToString = (collection, key) =>
   collection.map((obj) => obj[key].name).join(", ");
 
+const catchPokemon = (catchedPokemons, id) => () => {
+  catchedPokemonStore({ ...catchedPokemons, [id]: "test" });
+};
+
 const detail = () => {
   const { name } = useParams();
   const { loading, error, data } = useQuery(POKEMON_DETAIL_QUERY, {
     variables: { name },
   });
+
+  const { catchedPokemons } =
+    useQuery(gql`
+      query getCatchedPokemons {
+        catchedPokemons @client
+      }
+    `).data || {};
+
+  console.log("------------------------------------");
+  console.log({ catchedPokemons });
+  console.log("------------------------------------");
 
   if (loading) return null;
   if (error) return `Error! ${error}`;
@@ -101,7 +117,7 @@ const detail = () => {
           bottom: 0,
         }}
       >
-        <Button bg="bg-2">
+        <Button bg="bg-2" onClick={catchPokemon(catchedPokemons, pokemon.id)}>
           <Heading>CATCH</Heading>
         </Button>
       </Flex>

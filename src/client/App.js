@@ -10,13 +10,29 @@ import fetch from "cross-fetch";
 import { BrowserRouter as Router } from "react-router-dom";
 import { hashira } from "./theme";
 import Layout from "./Layout";
+import { catchedPokemons } from "./store";
+
+const typePolicies = {
+  Query: {
+    fields: {
+      catchedPokemons: {
+        read() {
+          return catchedPokemons();
+        },
+      },
+    },
+  },
+};
+const cache = new InMemoryCache({ typePolicies }).restore(
+  window.__APOLLO_STATE__
+);
 
 const client = new ApolloClient({
+  cache,
   link: new HttpLink({
     uri: "https://graphql-pokeapi.vercel.app/api/graphql",
     fetch,
   }),
-  cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
 });
 
 const App = () => (
