@@ -5,16 +5,15 @@ import { Box } from "./reusable/flexbox";
 import { Heading } from "./reusable/typography";
 import { Link } from "./reusable/link";
 import { List, Detail } from "./pages/pokemon";
-import { initCatchedPokemons } from "./store";
+import { useCatchedPokemons } from "./store";
 
 const layout = () => {
-  useEffect(
-    () =>
-      initCatchedPokemons(
-        JSON.parse(localStorage.getItem("catchedPokemons")) || {}
-      ),
-    []
-  );
+  const { initCatchedPokemons } = useCatchedPokemons();
+  useEffect(() => {
+    initCatchedPokemons(
+      JSON.parse(localStorage.getItem("catchedPokemons")) || {}
+    );
+  }, []);
   return (
     <Box>
       <Global

@@ -5,7 +5,7 @@ import { Box, Flex } from "../../reusable/flexbox/index";
 import { Heading, Text } from "../../reusable/typography";
 import { Divider } from "../../reusable/divider";
 import { Button } from "../../reusable/button";
-import { setCatchedPokemons } from "../../store";
+import { useCatchedPokemons } from "../../store";
 
 const POKEMON_DETAIL_QUERY = gql`
   query GetPokemonDetail($name: String!) {
@@ -32,11 +32,8 @@ const POKEMON_DETAIL_QUERY = gql`
 const collectionToString = (collection, key) =>
   collection.map((obj) => obj[key].name).join(", ");
 
-const catchPokemon = (id) => () => {
-  console.log("------------------------------------");
-  console.log({ id });
-  console.log("------------------------------------");
-  setCatchedPokemons(id, "test");
+const catchPokemon = (setCatchedPokemons, id) => () => {
+  setCatchedPokemons(id, Math.random().toString(36).substring(7));
 };
 
 const detail = () => {
@@ -44,17 +41,10 @@ const detail = () => {
   const { loading, error, data } = useQuery(POKEMON_DETAIL_QUERY, {
     variables: { name },
   });
-
-  const { catchedPokemons } =
-    useQuery(gql`
-      query getCatchedPokemons {
-        catchedPokemons @client
-      }
-    `).data || {};
-
-  console.log("------------------------------------");
-  console.log({ catchedPokemons });
-  console.log("------------------------------------");
+  const {
+    setCatchedPokemons,
+    getAmountOfCatchedPokemonsById,
+  } = useCatchedPokemons();
 
   if (loading) return null;
   if (error) return `Error! ${error}`;
@@ -82,7 +72,7 @@ const detail = () => {
             Owned Total: &nbsp;
           </Text>
           <Text as="span" color="primary">
-            0
+            {getAmountOfCatchedPokemonsById(pokemon.id)}
           </Text>
         </Box>
         <Box
@@ -120,7 +110,10 @@ const detail = () => {
           bottom: 0,
         }}
       >
-        <Button bg="bg-2" onClick={catchPokemon(pokemon.id)}>
+        <Button
+          bg="bg-2"
+          onClick={catchPokemon(setCatchedPokemons, pokemon.id)}
+        >
           <Heading>CATCH</Heading>
         </Button>
       </Flex>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeProvider } from "theme-ui";
 import {
   ApolloClient,
@@ -10,22 +10,8 @@ import fetch from "cross-fetch";
 import { BrowserRouter as Router } from "react-router-dom";
 import { hashira } from "./theme";
 import Layout from "./Layout";
-import { getCatchedPokemonsStore } from "./store";
 
-const typePolicies = {
-  Query: {
-    fields: {
-      catchedPokemons: {
-        read() {
-          return getCatchedPokemonsStore();
-        },
-      },
-    },
-  },
-};
-const cache = new InMemoryCache({ typePolicies }).restore(
-  window.__APOLLO_STATE__
-);
+const cache = new InMemoryCache().restore(window.__APOLLO_STATE__);
 
 const client = new ApolloClient({
   cache,
@@ -35,14 +21,16 @@ const client = new ApolloClient({
   }),
 });
 
-const App = () => (
-  <ApolloProvider client={client}>
-    <Router>
-      <ThemeProvider theme={hashira}>
-        <Layout />
-      </ThemeProvider>
-    </Router>
-  </ApolloProvider>
-);
+const App = () => {
+  return (
+    <ApolloProvider client={client}>
+      <Router>
+        <ThemeProvider theme={hashira}>
+          <Layout />
+        </ThemeProvider>
+      </Router>
+    </ApolloProvider>
+  );
+};
 
 export default App;

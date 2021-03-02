@@ -1,25 +1,30 @@
-import { makeVar } from "@apollo/client";
+import { makeVar, useReactiveVar } from "@apollo/client";
 
-const catchedPokemons = makeVar({});
+const catchedPokemonsVar = makeVar({});
 
-const initCatchedPokemons = (initialData) => catchedPokemons(initialData);
+const initCatchedPokemons = (initialData) => catchedPokemonsVar(initialData);
 
-const getCatchedPokemonsStore = () => catchedPokemons();
-
-const setCatchedPokemons = (id, nickname) => {
-  catchedPokemons({
-    ...catchedPokemons(),
-    [id]: nickname,
+const setCatchedPokemons = (catchedPokemons) => (id, nickname) => {
+  catchedPokemonsVar({
+    ...catchedPokemons,
+    [id]: [...(catchedPokemons[id] || []), nickname],
   });
-  localStorage.setItem(
-    "catchedPokemons",
-    JSON.stringify(getCatchedPokemonsStore())
-  );
+  localStorage.setItem("catchedPokemons", JSON.stringify(catchedPokemons));
 };
 
-export {
-  setCatchedPokemons,
-  initCatchedPokemons,
-  getCatchedPokemonsStore,
-  catchedPokemons,
+const getAmountOfCatchedPokemonsById = (catchedPokemons) => (id) =>
+  (catchedPokemons[id] || []).length;
+
+const useCatchedPokemons = () => {
+  const catchedPokemons = useReactiveVar(catchedPokemonsVar);
+  return {
+    catchedPokemons,
+    initCatchedPokemons,
+    setCatchedPokemons: setCatchedPokemons(catchedPokemons),
+    getAmountOfCatchedPokemonsById: getAmountOfCatchedPokemonsById(
+      catchedPokemons
+    ),
+  };
 };
+
+export { useCatchedPokemons, catchedPokemonsVar };
