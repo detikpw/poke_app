@@ -10,14 +10,14 @@ import fetch from "cross-fetch";
 import { BrowserRouter as Router } from "react-router-dom";
 import { hashira } from "./theme";
 import Layout from "./Layout";
-import { catchedPokemons } from "./store";
+import { getCatchedPokemonsStore } from "./store";
 
 const typePolicies = {
   Query: {
     fields: {
       catchedPokemons: {
         read() {
-          return catchedPokemons();
+          return getCatchedPokemonsStore();
         },
       },
     },
