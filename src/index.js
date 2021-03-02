@@ -4,8 +4,6 @@ const ReactDomServer = require("react-dom/server");
 const { ApolloProvider } = require("@apollo/client");
 const { getDataFromTree } = require("@apollo/client/react/ssr");
 const { StaticRouter } = require("react-router");
-const { Global } = require("@emotion/core");
-const { Switch, Route } = require("react-router-dom");
 const React = require("react");
 import { ThemeProvider } from "theme-ui";
 const client = require("./api").default;
@@ -15,7 +13,8 @@ const Layout = require("./client/Layout").default;
 const app = express();
 const port = 3000;
 
-const Html = ({ content, state }) => (
+const getDoc = ({ content, state }) =>
+  `<!DOCTYPE html>
   <html>
     <head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,20 +26,17 @@ const Html = ({ content, state }) => (
       <title>Pokemon</title>
     </head>
     <body>
-      <div id="app" dangerouslySetInnerHTML={{ __html: content }} />
-      <script src="/static/bundle.js" />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.__APOLLO_STATE__=${JSON.stringify(state).replace(
-            /</g,
-            "\\u003c"
-          )};`,
-        }}
-      />
+      <div id="app">
+        ${content}
+        </div>
+      <script type="text/javascript">window.__APOLLO_STATE__=${JSON.stringify(
+        state
+      )}</script>
+      <script src="/static/bundle.js"></script>
     </body>
-  </html>
-);
+  </html>`;
 
+app.use("/static", express.static(path.join(__dirname, "..", "public")));
 app.use((req, res) => {
   const context = {};
   const App = (
@@ -52,12 +48,10 @@ app.use((req, res) => {
       </StaticRouter>
     </ApolloProvider>
   );
-  getDataFromTree(App).then((content) => {
+  getDataFromTree(App).then(() => {
     const initialState = client.extract();
-    const html = <Html content={content} state={initialState} />;
-    res.send(`<!Doctype html>\n${ReactDomServer.renderToStaticMarkup(html)}`);
-    res.end();
+    const content = ReactDomServer.renderToString(App);
+    res.send(getDoc({ content, state: initialState }));
   });
 });
-app.use("/static", express.static(path.join(__dirname, "..", "public")));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
