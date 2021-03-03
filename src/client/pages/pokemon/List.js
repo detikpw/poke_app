@@ -4,6 +4,7 @@ import { Box, Flex } from "../../reusable/flexbox/index";
 import { Heading, Text } from "../../reusable/typography";
 import { Divider } from "../../reusable/divider";
 import { Link } from "../../reusable/link";
+import { useCatchedPokemons } from "../../store";
 
 const POKEMON_LIST_QUERY = gql`
   query GetPokemonList {
@@ -18,7 +19,7 @@ const POKEMON_LIST_QUERY = gql`
   }
 `;
 
-const PokemonCard = ({ name, image }) => (
+const PokemonCard = ({ name, image, amountOfCatchedPokemons }) => (
   <Link to={`/pokemon/${name}`}>
     <Flex width={1} alignItems="center">
       <Box as="img" width={1 / 3} src={image} />
@@ -29,7 +30,7 @@ const PokemonCard = ({ name, image }) => (
         </Flex>
         <Flex>
           <Text color="alt-2">Owned Total:&nbsp;</Text>
-          <Text color="primary">0</Text>
+          <Text color="primary">{amountOfCatchedPokemons}</Text>
         </Flex>
       </Box>
     </Flex>
@@ -39,6 +40,7 @@ const PokemonCard = ({ name, image }) => (
 
 const list = () => {
   const { loading, error, data } = useQuery(POKEMON_LIST_QUERY);
+  const { getAmountOfCatchedPokemonsById } = useCatchedPokemons();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
   return (
@@ -46,7 +48,12 @@ const list = () => {
       <Heading fontSize={1}>Pokemon List</Heading>
       <Box mt={4} p={4} bg="bg-2">
         {data.pokemons.results.map(({ name, image, id }) => (
-          <PokemonCard key={id} name={name} image={image} />
+          <PokemonCard
+            key={id}
+            name={name}
+            image={image}
+            amountOfCatchedPokemons={getAmountOfCatchedPokemonsById(id)}
+          />
         ))}
       </Box>
     </Box>
