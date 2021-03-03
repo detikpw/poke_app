@@ -3,7 +3,7 @@ import { Box } from "../flexbox";
 import { Text, Heading } from "../typography";
 
 // css style for input from https://nostalgic-css.github.io/NES.css/
-const Input = forwardRef(({ label, ...styledDesignProps }, ref) => (
+const Input = forwardRef(({ label, maxLength, ...styledDesignProps }, ref) => (
   <Box {...styledDesignProps}>
     <Text as="label" fontSize={4}>
       {label}
@@ -15,6 +15,7 @@ const Input = forwardRef(({ label, ...styledDesignProps }, ref) => (
       width={1}
       p={2}
       textAlign="center"
+      maxLength={maxLength}
       css={{
         borderStyle: "solid",
         borderWidth: 4,

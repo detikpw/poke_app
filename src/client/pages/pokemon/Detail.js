@@ -81,7 +81,7 @@ const detail = () => {
               borderColor: "alt-2",
             }}
           >
-            <Input label="Give a nickname" />
+            <Input label="Give a nickname" maxLength={12} />
           </Box>
         </Box>
       )}
