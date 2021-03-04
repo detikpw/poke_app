@@ -6,7 +6,6 @@ const Button = (props) => (
   <Box
     {...props}
     as="button"
-    width={1}
     p={2}
     textAlign="center"
     css={{

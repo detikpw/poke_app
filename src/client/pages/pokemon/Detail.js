@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router";
 import { useQuery, gql } from "@apollo/client";
 import { Box, Flex } from "../../reusable/flexbox/index";
@@ -6,6 +6,7 @@ import { Heading, Text } from "../../reusable/typography";
 import { Divider } from "../../reusable/divider";
 import { Button } from "../../reusable/button";
 import { Input } from "../../reusable/form";
+import { Dialog, DialogContent } from "../../reusable/dialog";
 import { useCatchedPokemons } from "../../store";
 
 const POKEMON_DETAIL_QUERY = gql`
@@ -33,8 +34,24 @@ const POKEMON_DETAIL_QUERY = gql`
 const collectionToString = (collection, key) =>
   collection.map((obj) => obj[key].name).join(", ");
 
-const catchPokemon = (setCatchedPokemons, id) => () => {
-  setCatchedPokemons(id, Math.random().toString(36).substring(7));
+const initialAlert = {
+  status: null,
+  message: null,
+};
+const setPokemonNickname = ({
+  setCatchedPokemons,
+  pokemonId,
+  onClose,
+  inputNicknameEl,
+  setAlert,
+}) => () => {
+  try {
+    setCatchedPokemons(pokemonId, inputNicknameEl.current.value);
+    setAlert(initialAlert);
+    onClose();
+  } catch (error) {
+    setAlert({ message: error.message, status: "error" });
+  }
 };
 
 const detail = () => {
@@ -46,46 +63,44 @@ const detail = () => {
     setCatchedPokemons,
     getAmountOfCatchedPokemonsById,
   } = useCatchedPokemons();
+  const inputNicknameEl = useRef(null);
 
   const [dialog, setDialog] = useState(false);
-
+  const [alert, setAlert] = useState(initialAlert);
   if (loading) return null;
   if (error) return `Error! ${error}`;
   const { pokemon } = data;
-  return (
-    <Box>
-      {dialog && (
-        <Box
-          pt={100}
-          width={1}
-          height="100%"
-          bg="rgba(0,0,0,0.1)"
-          onClick={() => setDialog(false)}
-          sx={{
-            position: "fixed",
-            zIndex: 2,
-            left: 0,
-            top: 0,
-          }}
-        >
-          <Box
-            bg="bg-1"
-            width={7 / 8}
-            m="auto"
-            py={6}
-            px={8}
-            onClick={(e) => e.stopPropagation()}
-            sx={{
-              borderWidth: 4,
-              borderStyle: "solid",
-              borderColor: "alt-2",
-            }}
+  const renderDialog = (
+    <Dialog open={dialog} onClose={() => setDialog(false)}>
+      <DialogContent>
+        <Input ref={inputNicknameEl} label="Give a nickname" maxLength={12} />
+        {alert.status === "error" && (
+          <Text mt={4} color="alt-2">
+            {alert.message}
+          </Text>
+        )}
+        <Flex mt={4} justifyContent="space-between" width={1}>
+          <Button onClick={() => setDialog(false)} bg="white">
+            <Heading>CANCEL</Heading>
+          </Button>
+          <Button
+            bg="bg-2"
+            onClick={setPokemonNickname({
+              setCatchedPokemons,
+              inputNicknameEl,
+              setAlert,
+              pokemonId: pokemon.id,
+              onClose: () => setDialog(false),
+            })}
           >
-            <Input label="Give a nickname" maxLength={12} />
-          </Box>
-        </Box>
-      )}
-      <Heading fontSize={1}>{name}</Heading>
+            <Heading>SAVE!</Heading>
+          </Button>
+        </Flex>
+      </DialogContent>
+    </Dialog>
+  );
+  const renderPokemonCard = (
+    <Box>
       <Box mt={4} width={1}>
         <Box
           as="img"
@@ -136,6 +151,13 @@ const detail = () => {
         </Box>
       </Box>
       <Divider />
+    </Box>
+  );
+  const rendermain = (
+    <Box>
+      {renderDialog}
+      <Heading fontSize={1}>{name}</Heading>
+      {renderPokemonCard}
       <Flex
         width={1}
         py={2}
@@ -144,12 +166,13 @@ const detail = () => {
           bottom: 0,
         }}
       >
-        <Button bg="bg-2" onClick={() => setDialog(!dialog)}>
+        <Button bg="bg-2" width={1} onClick={() => setDialog(!dialog)}>
           <Heading>CATCH</Heading>
         </Button>
       </Flex>
     </Box>
   );
+  return rendermain;
 };
 
 export default detail;
