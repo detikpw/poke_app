@@ -6,7 +6,7 @@ const initCatchedPokemons = (initialData) => catchedPokemonsVar(initialData);
 
 const setNickname = (catchedPokemonsById = [], nickname) => {
   if (catchedPokemonsById.find((value) => value === nickname))
-    throw Error("Error gan");
+    throw Error("You've already give same nickname for this pokemon");
   return [...catchedPokemonsById, nickname];
 };
 

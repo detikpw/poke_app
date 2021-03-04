@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useParams } from "react-router";
 import { useQuery, gql } from "@apollo/client";
 import { Box, Flex } from "../../reusable/flexbox/index";
@@ -67,11 +67,17 @@ const detail = () => {
 
   const [dialog, setDialog] = useState(false);
   const [alert, setAlert] = useState(initialAlert);
+
+  const onClose = useCallback(() => {
+    setAlert(initialAlert);
+    setDialog(false);
+  }, [alert, dialog]);
+
   if (loading) return null;
   if (error) return `Error! ${error}`;
   const { pokemon } = data;
   const renderDialog = (
-    <Dialog open={dialog} onClose={() => setDialog(false)}>
+    <Dialog open={dialog} onClose={onClose}>
       <DialogContent>
         <Input ref={inputNicknameEl} label="Give a nickname" maxLength={12} />
         {alert.status === "error" && (
@@ -80,7 +86,7 @@ const detail = () => {
           </Text>
         )}
         <Flex mt={4} justifyContent="space-between" width={1}>
-          <Button onClick={() => setDialog(false)} bg="white">
+          <Button onClick={onClose} bg="white">
             <Heading>CANCEL</Heading>
           </Button>
           <Button
@@ -90,7 +96,7 @@ const detail = () => {
               inputNicknameEl,
               setAlert,
               pokemonId: pokemon.id,
-              onClose: () => setDialog(false),
+              onClose: onClose,
             })}
           >
             <Heading>SAVE!</Heading>
