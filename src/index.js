@@ -54,4 +54,4 @@ app.use((req, res) => {
     res.send(getDoc({ content, state: initialState }));
   });
 });
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Pokeapp listening on port ${port}!`));
