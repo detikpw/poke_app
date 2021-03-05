@@ -6,11 +6,13 @@ const { getDataFromTree } = require("@apollo/client/react/ssr");
 const { StaticRouter } = require("react-router");
 const React = require("react");
 import { ThemeProvider } from "theme-ui";
+const compression = require("compression");
 const client = require("./api").default;
 const { hashira } = require("./client/theme");
 const Layout = require("./client/Layout").default;
 
 const app = express();
+app.use(compression());
 const port = process.env.PORT || 3000;
 
 const getDoc = ({ content, state }) =>
