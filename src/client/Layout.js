@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { Global } from "@emotion/core";
 import { Switch, Route } from "react-router";
-import { Box } from "./reusable/flexbox";
-import { Heading } from "./reusable/typography";
+import { Box, Flex } from "./reusable/flexbox";
+import { Heading, Text } from "./reusable/typography";
 import { Link } from "./reusable/link";
 import { List, Detail } from "./pages/pokemon";
+import { MyPokemon } from "./pages/me";
 import { useCatchedPokemons } from "./store";
 
 const layout = () => {
-  const { initCatchedPokemons } = useCatchedPokemons();
+  const { initCatchedPokemons, amountOfCatchedPokemons } = useCatchedPokemons();
   useEffect(() => {
     initCatchedPokemons(
       JSON.parse(localStorage.getItem("catchedPokemons")) || {}
@@ -25,7 +26,7 @@ const layout = () => {
           },
         })}
       />
-      <Box
+      <Flex
         px={4}
         py={2}
         bg="bg-2"
@@ -37,11 +38,17 @@ const layout = () => {
         <Link to="/">
           <Heading color="alt-2">PokeApp</Heading>
         </Link>
-      </Box>
+        <Link ml="auto" to="/me/pokemon">
+          <Text color="alt-2">My Pokemon({amountOfCatchedPokemons})</Text>
+        </Link>
+      </Flex>
       <Box p={4}>
         <Switch>
           <Route path="/pokemon/:name">
             <Detail />
+          </Route>
+          <Route path="/me/pokemon">
+            <MyPokemon />
           </Route>
           <Route path="/">
             <List />
