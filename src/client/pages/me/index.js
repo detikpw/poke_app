@@ -41,6 +41,7 @@ const MyPokemon = () => {
       const renderNicknameCards = nicknames.map((nickname) => (
         <PokemonCard
           key={`${pokemonId}:${nickname}`}
+          id={pokemonId}
           name={name}
           image={image}
           nickname={nickname}

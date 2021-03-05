@@ -23,6 +23,20 @@ const setCatchedPokemons = (catchedPokemons) => (id, nickname) => {
   );
 };
 
+const releasePokemon = (catchedPokemons) => (id, nickname) => {
+  localStorage.setItem(
+    "catchedPokemons",
+    JSON.stringify(
+      catchedPokemonsVar({
+        ...catchedPokemons,
+        [id]: catchedPokemons[id].filter(
+          (pokemonNickname) => nickname !== pokemonNickname
+        ),
+      })
+    )
+  );
+};
+
 const getAmountOfCatchedPokemonsById = (catchedPokemons) => (id) =>
   (catchedPokemons[id] || []).length;
 
@@ -38,6 +52,7 @@ const useCatchedPokemons = () => {
     initCatchedPokemons,
     amountOfCatchedPokemons: getAmountOfCatchedPokemons(catchedPokemons),
     setCatchedPokemons: setCatchedPokemons(catchedPokemons),
+    releasePokemon: releasePokemon(catchedPokemons),
     getAmountOfCatchedPokemonsById: getAmountOfCatchedPokemonsById(
       catchedPokemons
     ),
