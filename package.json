@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode=\"production\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack watch",
-    "start": "webpack serve",
     "serve": "nodemon dist/index.js"
   },
   "keywords": [],
@@ -16,7 +15,6 @@
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@babel/node": "^7.13.0",
-    "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/preset-env": "^7.13.8",
     "@babel/preset-react": "^7.12.13",
     "babel-loader": "^8.2.2",
