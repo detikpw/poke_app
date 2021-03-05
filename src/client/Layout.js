@@ -42,19 +42,27 @@ const layout = () => {
           <Text color="alt-2">My Pokemon({amountOfCatchedPokemons})</Text>
         </Link>
       </Flex>
-      <Box p={4}>
-        <Switch>
-          <Route path="/pokemon/:name">
-            <Detail />
-          </Route>
-          <Route path="/me/pokemon">
-            <MyPokemon />
-          </Route>
-          <Route path="/">
-            <List />
-          </Route>
-        </Switch>
-      </Box>
+      <Flex justifyContent="center" width={1}>
+        <Box
+          p={4}
+          width="100%"
+          maxWidth={{
+            md: 640,
+          }}
+        >
+          <Switch>
+            <Route path="/pokemon/:name">
+              <Detail />
+            </Route>
+            <Route path="/me/pokemon">
+              <MyPokemon />
+            </Route>
+            <Route path="/">
+              <List />
+            </Route>
+          </Switch>
+        </Box>
+      </Flex>
     </Box>
   );
 };
