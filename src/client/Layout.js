@@ -30,22 +30,34 @@ const layout = () => {
         px={4}
         py={2}
         bg="bg-2"
+        width={1}
+        justifyContent="center"
         sx={{
           top: 0,
           position: "sticky",
         }}
       >
-        <Link to="/">
-          <Heading color="alt-2">PokeApp</Heading>
-        </Link>
-        <Link ml="auto" to="/me/pokemon">
-          <Text color="alt-2">My Pokemon({amountOfCatchedPokemons})</Text>
-        </Link>
+        <Flex
+          width={1}
+          px={{
+            md: 4,
+          }}
+          maxWidth={{
+            md: 640,
+          }}
+        >
+          <Link to="/">
+            <Heading color="alt-2">PokeApp</Heading>
+          </Link>
+          <Link ml="auto" to="/me/pokemon">
+            <Text color="alt-2">My Pokemon({amountOfCatchedPokemons})</Text>
+          </Link>
+        </Flex>
       </Flex>
       <Flex justifyContent="center" width={1}>
         <Box
           p={4}
-          width="100%"
+          width={1}
           maxWidth={{
             md: 640,
           }}
