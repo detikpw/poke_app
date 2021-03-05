@@ -19,7 +19,7 @@ const PokemonCard = ({
       <Flex width={1} alignItems="center">
         <Link width={1} to={`/pokemon/${name}`}>
           <Flex alignItems="center">
-            <Box as="img" width={1 / 3} src={image} />
+            <Box as="img" width={1 / 3} src={image} alt={name} />
             <Box width={2 / 3}>
               <Flex>
                 <Text color="alt-2">Name:&nbsp;</Text>

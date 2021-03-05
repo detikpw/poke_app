@@ -141,6 +141,7 @@ const detail = () => {
           mr={2}
           width={1 / 3}
           src={pokemon.sprites.front_default}
+          alt={name}
           sx={{
             float: "left",
           }}
