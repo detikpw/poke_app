@@ -25,7 +25,7 @@ const PokemonCard = ({
                 <Text color="alt-2">Name:&nbsp;</Text>
                 <Text color="primary">{name}</Text>
               </Flex>
-              {amountOfCatchedPokemons && (
+              {typeof amountOfCatchedPokemons !== "undefined" && (
                 <Flex>
                   <Text color="alt-2">Owned Total:&nbsp;</Text>
                   <Text color="primary">{amountOfCatchedPokemons}</Text>
