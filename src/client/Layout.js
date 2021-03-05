@@ -16,13 +16,14 @@ const layout = () => {
     );
   }, []);
   return (
-    <Box>
+    <Flex height="100vh" flexDirection="column">
       <Global
         styles={(theme) => ({
           body: {
             backgroundColor: theme.colors["bg-1"],
             color: theme.colors.primary,
             fontFamily: theme.fonts.vt323,
+            position: "relative",
           },
         })}
       />
@@ -75,7 +76,70 @@ const layout = () => {
           </Switch>
         </Box>
       </Flex>
-    </Box>
+      <Flex
+        as="footer"
+        mt="auto"
+        px={4}
+        py={2}
+        bg="bg-2"
+        width={1}
+        flexDirection="column"
+        alignItems="center"
+        sx={{
+          position: "relative",
+          bottom: 0,
+          left: 0,
+        }}
+      >
+        <Box
+          width={1}
+          textAlign="center"
+          px={{
+            md: 4,
+          }}
+          maxWidth={{
+            md: 640,
+          }}
+        >
+          <Box as="span">
+            Data provided by &nbsp;
+            <Link
+              color="alt-2"
+              to="https://graphql-pokeapi.vercel.app/api/graphql"
+            >
+              Pokeapi.
+            </Link>
+            &nbsp; Color theme{" "}
+            <Link color="alt-2" to="https://ethanschoonover.com/solarized/">
+              solarized.
+            </Link>
+          </Box>
+        </Box>
+        <Box
+          width={1}
+          textAlign="center"
+          px={{
+            md: 4,
+          }}
+          maxWidth={{
+            md: 640,
+          }}
+        >
+          <Box as="span">
+            Style theme inspired by{" "}
+            <Link color="alt-2" to="https://nostalgic-css.github.io/NES.css/">
+              Nes.CSS{" "}
+            </Link>
+          </Box>
+          <Box as="span">
+            <Link color="alt-2" to="https://github.com/detikpw/poke_app">
+              Site Source{" "}
+            </Link>
+            © 2021
+          </Box>
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 
