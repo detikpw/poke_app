@@ -11,7 +11,7 @@ const { hashira } = require("./client/theme");
 const Layout = require("./client/Layout").default;
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const getDoc = ({ content, state }) =>
   `<!DOCTYPE html>
