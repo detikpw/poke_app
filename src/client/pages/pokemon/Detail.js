@@ -34,29 +34,49 @@ const POKEMON_DETAIL_QUERY = gql`
 const collectionToString = (collection, key) =>
   collection.map((obj) => obj[key].name).join(", ");
 
-const initialAlert = {
-  status: null,
-  message: null,
+const initialError = null;
+
+const catchPokemon = ({ setError, setDialog, pokemon }) => () => {
+  try {
+    const probabilitySet = [true, false];
+    const result =
+      probabilitySet[Math.floor(Math.random() * probabilitySet.length)];
+    setDialog(true);
+    if (!result)
+      throw new FailCatchPokemon(`Ooops ${pokemon.name} failed to catch`);
+  } catch (error) {
+    setError(error);
+  }
 };
+
+class FailCatchPokemon extends Error {
+  constructor(message) {
+    super(message);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, FailCatchPokemon);
+    }
+  }
+}
+
 const setPokemonNickname = ({
   setCatchedPokemons,
-  pokemonId,
+  pokemon,
   onClose,
   inputNicknameEl,
-  setAlert,
+  setError,
 }) => () => {
   try {
-    setCatchedPokemons(pokemonId, inputNicknameEl.current.value);
-    setAlert(initialAlert);
+    setCatchedPokemons(pokemon.id, inputNicknameEl.current.value);
+    setError(initialError);
     onClose();
   } catch (error) {
-    setAlert({ message: error.message, status: "error" });
+    setError(error);
   }
 };
 
 const detail = () => {
   const { name } = useParams();
-  const { loading, error, data } = useQuery(POKEMON_DETAIL_QUERY, {
+  const { loading, error: errorFetch, data } = useQuery(POKEMON_DETAIL_QUERY, {
     variables: { name },
   });
   const {
@@ -66,23 +86,27 @@ const detail = () => {
   const inputNicknameEl = useRef(null);
 
   const [dialog, setDialog] = useState(false);
-  const [alert, setAlert] = useState(initialAlert);
+  const [error, setError] = useState(initialError);
 
   const onClose = useCallback(() => {
-    setAlert(initialAlert);
+    setError(initialError);
     setDialog(false);
-  }, [alert, dialog]);
+  }, [error, dialog]);
 
   if (loading) return null;
-  if (error) return `Error! ${error}`;
+  if (errorFetch) return `Error! ${error}`;
   const { pokemon } = data;
-  const renderDialog = (
-    <Dialog open={dialog} onClose={onClose}>
-      <DialogContent>
+  const renderDialogContent =
+    error instanceof FailCatchPokemon ? (
+      <Flex flexDirection="column">
+        <Heading>{error.message}</Heading>
+      </Flex>
+    ) : (
+      <Box>
         <Input ref={inputNicknameEl} label="Give a nickname" maxLength={12} />
-        {alert.status === "error" && (
+        {error instanceof Error && (
           <Text mt={4} color="alt-2">
-            {alert.message}
+            {error.message}
           </Text>
         )}
         <Flex mt={4} justifyContent="space-between" width={1}>
@@ -94,15 +118,19 @@ const detail = () => {
             onClick={setPokemonNickname({
               setCatchedPokemons,
               inputNicknameEl,
-              setAlert,
-              pokemonId: pokemon.id,
+              setError: setError,
+              pokemon,
               onClose: onClose,
             })}
           >
             <Heading>SAVE!</Heading>
           </Button>
         </Flex>
-      </DialogContent>
+      </Box>
+    );
+  const renderDialog = (
+    <Dialog open={dialog} onClose={onClose}>
+      <DialogContent>{renderDialogContent}</DialogContent>
     </Dialog>
   );
   const renderPokemonCard = (
@@ -172,7 +200,11 @@ const detail = () => {
           bottom: 0,
         }}
       >
-        <Button bg="bg-2" width={1} onClick={() => setDialog(!dialog)}>
+        <Button
+          bg="bg-2"
+          width={1}
+          onClick={catchPokemon({ setDialog, pokemon, setError: setError })}
+        >
           <Heading>CATCH</Heading>
         </Button>
       </Flex>
